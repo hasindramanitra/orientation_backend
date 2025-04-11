@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -16,6 +17,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Email(
+        message: 'The email is not a valid email.',
+    )]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
@@ -29,7 +34,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 8)]
     private ?string $password = null;
+
+    #[ORM\Column]
+    private ?bool $isVerified = false;
+
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Profile $profile = null;
 
     public function getId(): ?int
     {
@@ -104,5 +117,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * Get the value of isVerified
+     */ 
+    public function isVerified()
+    {
+        return $this->isVerified;
+    }
+
+    /**
+     * Set the value of isVerified
+     *
+     * @return  self
+     */ 
+    public function setVerified($isVerified)
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(Profile $profile): static
+    {
+        // set the owning side of the relation if necessary
+        if ($profile->getUser() !== $this) {
+            $profile->setUser($this);
+        }
+
+        $this->profile = $profile;
+
+        return $this;
     }
 }

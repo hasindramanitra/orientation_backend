@@ -1,0 +1,14 @@
+ <div style="display:flex;justify-content:center;align-items:center;">
+    <div>
+    <p style="font-size: 24px; font-weight: 600;">Confirmez Votre Adresse Mail</p>
+    <p style="font-size: 22px; font-weight: 500;">Bonjour {{newUser.profile.lastName}},</p>
+    <p>Cliquez sur le bouton ci-dessous pour confirmer votre adresse mail.</p>
+    <p>Si vous n'avez pas créer un compte sur Orientation. Vous pouvez supprimer cette email.</p>
+    <div style="display:flex;justify-content:center;align-items:center;">
+        <a style="background: #3664F4; padding-top: 12px; padding-bottom: 12px; padding-left: 35px; padding-right: 35px; border-radius: 10px;text-decoration: none; color: white;margin-top: 30px;font-size: 18px;" href={{ absolute_url(path('verify_user', {token: token}))}}>Cliquez ici</a>
+    </div>
+    <p style="font-size: 18px; font-weight: 500;margin-top: 25px;">L'équipe d'Orion.</p>
+    </div>
+
+    
+ </div>
